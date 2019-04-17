@@ -151,4 +151,27 @@ for file_name in log_file_names:
 
 plot_and_save_line_graph(gpu_parameters_collection)
 
+# 4つのGPUの消費電力の合計のグラフ
+
+gpu_current_average_power_sums = []
+
+for index in range(len(gpu_parameters_collection[0].current_average_powers)):
+
+    gpu_current_average_power_sum = 0
+
+    for gpu_index2 in range(4):
+        gpu_current_average_power_sum += gpu_parameters_collection[0].current_average_powers[index]
+
+    gpu_current_average_power_sums.append(gpu_current_average_power_sum)
+
+
+save_directory_path = f'./graph/{datetime_now.year}/{datetime_now.month}/{datetime_now.day}/{datetime_now.hour}_{datetime_now.minute}_{datetime_now.second}/gpus_power_sum'
+
+if not os.path.isdir(save_directory_path):
+    os.makedirs(save_directory_path)
+
+plt.plot(gpu_current_average_power_sums)
+plt.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
+plt.show()
+
 exit()
