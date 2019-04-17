@@ -2,10 +2,15 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import glob
+from datetime import datetime
+import os
 
 log_file_names = glob.glob('./nvidia-smi_error_time_results/*')
+
 # log_file_names = sorted(glob.glob('./nvidia-smi_gpu-burn_results/200W_120s/*'))
 # log_file_names = sorted(glob.glob('./nvidia-smi_gpu-burn_results/250W_120s/*'))
+
+datetime_now = datetime.now()
 
 
 class GpuParameters:
@@ -49,32 +54,37 @@ def parse_and_add_gpu_parameters(line: str, gpu_index: int) -> None:
 def plot_and_save_line_graph(gpu_parameters_collection: List[GpuParameters]) -> None:
     # 折れ線グラフを描画
     for index, gpu_parameter in enumerate(gpu_parameters_collection):
+        save_directory_path = f'./graph/{datetime_now.year}/{datetime_now.month}/{datetime_now.day}/{datetime_now.hour}_{datetime_now.minute}_{datetime_now.second}/gpu{index}'
+
+        if not os.path.isdir(save_directory_path):
+            os.makedirs(save_directory_path)
+
         plt.plot(gpu_parameter.current_fan_speeds)
-        plt.savefig(f'gpu{index}_current_fans.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_current_fans.png')
         plt.show()
 
         plt.plot(gpu_parameter.current_temperatures)
-        plt.savefig(f'gpu{index}_current_temperatures.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_current_temperatures.png')
         plt.show()
 
         plt.plot(gpu_parameter.current_average_powers)
-        plt.savefig(f'gpu{index}_current_average_powers.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_current_average_powers.png')
         plt.show()
 
         plt.plot(gpu_parameter.seted_max_powers)
-        plt.savefig(f'gpu{index}_seted_max_powers.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_seted_max_powers.png')
         plt.show()
 
         plt.plot(gpu_parameter.current_memory_usages)
-        plt.savefig(f'gpu{index}_current_memory_usages.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_current_memory_usages.png')
         plt.show()
 
         plt.plot(gpu_parameter.memory_capacitys)
-        plt.savefig(f'gpu{index}_memory_capacitys.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_memory_capacitys.png')
         plt.show()
 
         plt.plot(gpu_parameter.current_usages)
-        plt.savefig(f'gpu{index}_current_usages.png')
+        plt.savefig(f'{save_directory_path}/gpu{index}_current_usages.png')
         plt.show()
 
 
