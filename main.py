@@ -3,10 +3,7 @@ from typing import List
 import matplotlib.pyplot as plt
 import glob
 
-#
 log_file_names = glob.glob('./nvidia-smi_error_time_results/*')
-
-
 # log_file_names = sorted(glob.glob('./nvidia-smi_gpu-burn_results/200W_120s/*'))
 # log_file_names = sorted(glob.glob('./nvidia-smi_gpu-burn_results/250W_120s/*'))
 
