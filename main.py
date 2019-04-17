@@ -151,7 +151,7 @@ for file_name in log_file_names:
 
 plot_and_save_line_graph(gpu_parameters_collection)
 
-# 4つのGPUの消費電力の合計のグラフ
+# 4つのGPUの消費電力の合計のグラフ（以下は抽象化に失敗したコード、DRY原則難しい...）
 
 gpu_current_average_power_sums = []
 
