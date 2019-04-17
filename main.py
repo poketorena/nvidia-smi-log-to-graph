@@ -12,6 +12,19 @@ log_file_names = glob.glob('./nvidia-smi_error_time_results/*')
 
 datetime_now = datetime.now()
 
+# 赤い点線（デッドライン）の設定
+
+# 0から線を引く
+xmin = 0
+# 700まで線を引く
+xmax = len(log_file_names)
+# 消費電力の上限
+gpu1_power_upper_limit = 250
+# GPU4個
+multi_gpu_power_upper_limit = gpu1_power_upper_limit * 4
+# GPUの温度の上限
+gpu_temperature_upper_limit = 90
+
 
 class GpuParameters:
     def __init__(self):
@@ -64,10 +77,12 @@ def plot_and_save_line_graph(gpu_parameters_collection: List[GpuParameters]) -> 
         plt.show()
 
         plt.plot(gpu_parameter.current_temperatures)
+        plt.hlines([gpu_temperature_upper_limit], xmin, xmax, "red", linestyles='dashed')
         plt.savefig(f'{save_directory_path}/gpu{index}_current_temperatures.png')
         plt.show()
 
         plt.plot(gpu_parameter.current_average_powers)
+        plt.hlines([gpu1_power_upper_limit], xmin, xmax, "red", linestyles='dashed')
         plt.savefig(f'{save_directory_path}/gpu{index}_current_average_powers.png')
         plt.show()
 
@@ -96,6 +111,7 @@ for _ in range(4):
 
 for file_name in log_file_names:
     with open(file_name) as file:
+
         for index, line in enumerate(file):
             if index == 0:
                 print(line)
@@ -164,13 +180,14 @@ for index in range(len(gpu_parameters_collection[0].current_average_powers)):
 
     gpu_current_average_power_sums.append(gpu_current_average_power_sum)
 
-
 save_directory_path = f'./graph/{datetime_now.year}/{datetime_now.month}/{datetime_now.day}/{datetime_now.hour}_{datetime_now.minute}_{datetime_now.second}/gpus_power_sum'
 
 if not os.path.isdir(save_directory_path):
     os.makedirs(save_directory_path)
 
 plt.plot(gpu_current_average_power_sums)
+
+plt.hlines([multi_gpu_power_upper_limit], xmin, xmax, "red", linestyles='dashed')
 plt.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
 plt.show()
 
