@@ -223,11 +223,11 @@ save_directory_path = f'./graph/{datetime_now.year}/{datetime_now.month}/{dateti
 if not os.path.isdir(save_directory_path):
     os.makedirs(save_directory_path)
 
-ax = plt.subplot()
+fig, ax = plt.subplots()
+# ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d\n%H:%M:%s'))
 
-
-# ax.plot(datetimes, gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
 ax.plot(gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
+# ax.plot(datetimes, gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
 
 # Formatterでx軸の日付ラベルを月・日に設定
 
@@ -245,8 +245,7 @@ ax.set_title('The relationship between time and the power consumption of the fou
 ax.set_xlabel('Time')
 ax.set_ylabel('Sum of power consumption of 4 GPUs [W]')
 ax.hlines([multi_gpu_power_upper_limit], xmin, xmax, "red", linestyles='dashed')
-figure = ax.figure
-figure.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
-figure.show()
+fig.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
+fig.show()
 
 exit()
