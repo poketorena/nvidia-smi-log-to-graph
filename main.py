@@ -3,6 +3,7 @@ from typing import List
 import matplotlib.pyplot as plt
 import glob
 from datetime import datetime
+import matplotlib.dates as mdates
 import os
 
 log_file_names = glob.glob('./nvidia-smi_error_time_results/*')
@@ -131,7 +132,7 @@ def plot_and_save_line_graph(gpu_parameters_collection: List[GpuParameters]) -> 
         plt.show()
 
 
-days = []
+datetimes: List[datetime] = []
 gpu_parameters_collection = []
 
 for _ in range(4):
@@ -167,7 +168,16 @@ for file_name in log_file_names:
                 day_data2 = day_data.replace('_', '')
                 day_data3 = day_data2.replace('-', '')
 
-                days.append(day_data3)
+                year = int(day_data3[0:4])
+                month = int(day_data3[4:6])
+                day = int(day_data3[6:8])
+                hour = int(day_data3[8:10])
+                minute = int(day_data3[10:12])
+                second = int(day_data3[12:14])
+                datetime_data = datetime(year, month, day, hour, minute, second)
+
+                if not splited_line[0] == 'Unable':
+                    datetimes.append(datetime_data)
 
             elif index == 8:
                 # GPU 0
@@ -213,13 +223,30 @@ save_directory_path = f'./graph/{datetime_now.year}/{datetime_now.month}/{dateti
 if not os.path.isdir(save_directory_path):
     os.makedirs(save_directory_path)
 
-plt.plot(gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
-plt.legend()
-plt.title('The relationship between time and the power consumption of the four GPUs')
-plt.xlabel('Time')
-plt.ylabel('Sum of power consumption of 4 GPUs [W]')
-plt.hlines([multi_gpu_power_upper_limit], xmin, xmax, "red", linestyles='dashed')
-plt.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
-plt.show()
+ax = plt.subplot()
+
+
+# ax.plot(datetimes, gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
+ax.plot(gpu_current_average_power_sums, label='Sum of power consumption of 4 GPUs')
+
+# Formatterでx軸の日付ラベルを月・日に設定
+
+# xfmt = mdates.DateFormatter("%m/%d")
+#
+# # DayLocatorで間隔を日数に
+# xloc = mdates.DayLocator()
+#
+#
+# ax.xaxis.set_major_locator(xloc)
+# ax.xaxis.set_major_formatter(xfmt)
+
+ax.legend()
+ax.set_title('The relationship between time and the power consumption of the four GPUs')
+ax.set_xlabel('Time')
+ax.set_ylabel('Sum of power consumption of 4 GPUs [W]')
+ax.hlines([multi_gpu_power_upper_limit], xmin, xmax, "red", linestyles='dashed')
+figure = ax.figure
+figure.savefig(f'{save_directory_path}/gpu_current_average_power_sums.png')
+figure.show()
 
 exit()
