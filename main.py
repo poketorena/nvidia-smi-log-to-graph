@@ -17,7 +17,7 @@ datetime_now = datetime.now()
 
 # 0から線を引く
 xmin = 0
-# 700まで線を引く
+# ログファイルの数まで線を引く
 xmax = len(log_file_names)
 # 消費電力の上限
 gpu1_power_upper_limit = 250
