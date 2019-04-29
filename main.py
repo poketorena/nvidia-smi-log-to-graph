@@ -148,15 +148,14 @@ for file_name in log_file_names:
                 splited_line = line.split(' ')
 
                 if splited_line[0] == 'Unable':
-                    for i in range(3):
-                        # gpu[i].gpu_current_fans.append(-1)
-                        # gpu[i].gpu_current_temperatures.append(-1)
-                        # gpu[i].gpu_current_average_powers.append(-1)
-                        # gpu[i].gpu_seted_max_powers.append(-1)
-                        # gpu[i].gpu_current_memory_usages.append(-1)
-                        # gpu[i].gpu_memory_capacitys.append(-1)
-                        # gpu[i].gpu_current_usages.append(-1)
-                        pass
+                    for i in range(4):
+                        gpu_parameters_collection[i].current_fan_speeds.append(0)
+                        gpu_parameters_collection[i].current_temperatures.append(0)
+                        gpu_parameters_collection[i].current_average_powers.append(0)
+                        gpu_parameters_collection[i].seted_max_powers.append(0)
+                        gpu_parameters_collection[i].current_memory_usages.append(0)
+                        gpu_parameters_collection[i].memory_capacitys.append(0)
+                        gpu_parameters_collection[i].current_usages.append(0)
 
                 day_of_the_week = splited_line[0]
                 month = splited_line[1]
@@ -214,7 +213,7 @@ for index in range(len(gpu_parameters_collection[0].current_average_powers)):
     gpu_current_average_power_sum = 0
 
     for gpu_index2 in range(4):
-        gpu_current_average_power_sum += gpu_parameters_collection[0].current_average_powers[index]
+        gpu_current_average_power_sum += gpu_parameters_collection[gpu_index2].current_average_powers[index]
 
     gpu_current_average_power_sums.append(gpu_current_average_power_sum)
 
